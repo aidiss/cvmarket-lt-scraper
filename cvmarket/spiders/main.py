@@ -5,7 +5,7 @@ from scrapy.spiders import CrawlSpider, Rule
 
 
 class MainSpider(CrawlSpider):
-    name = 'main'
+    name = 'crawler'
     allowed_domains = ['cvmarket.lt']
     start_urls = ['https://www.cvmarket.lt/kaunas']
 
@@ -16,19 +16,11 @@ class MainSpider(CrawlSpider):
 
     
     def parse_listing(self, response: scrapy.http.Response):
-
         i = {}
         i['url'] = response.url
-
         i['expire'] = response.xpath('//a[@class="expire"]/span/text()').extract_first()
-
-        # i['job-title'] = response.xpath('//span[@id="main-job-title"]/text()').extract()
         i['job-title'] = response.css('span#main-job-title  *::text').extract()
-
-        # i['main'] = response.xpath('//div[@id="main-lang-block"]//text()').extract()
         i['main'] = response.css('div#main-lang-block *::text').extract()
-
-        # i['job-details'] = response.xpath('//div[@class="jobdetails"]//text()').extract()
         i['job-details'] = response.css('div.jobdetails *::text').extract()
         return i
 
